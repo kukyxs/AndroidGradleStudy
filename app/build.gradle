@@ -1,0 +1,202 @@
+import com.android.build.api.variant.ApplicationVariant
+import com.android.build.gradle.internal.api.ApplicationVariantImpl
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 31
+    buildToolsVersion "32.0.0"
+
+    defaultConfig {
+        applicationId "com.kuky.androidgradlestudy"
+        minSdk 21
+        targetSdk 31
+        versionCode 1
+        versionName "ver-0.1"
+
+        multiDexEnabled true
+        multiDexKeepProguard file('multidex-keep-rules.pro')
+//        ndk {
+//            abiFilters "armeabi-v7a", "arm64-v8a"
+//        }
+
+        vectorDrawables {
+//            generatedDensities 'mhdpi', 'xhdpi'
+            useSupportLibrary true
+        }
+
+        resourceConfigurations = ['zh', 'en']
+
+        buildConfigField('String', 'name', '"Test"')
+        resValue('string', 'age', '12 years')
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+
+            manifestPlaceholders = [icon: "@mipmap/ic_launcher"]
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField('String', 'type', '"Release"')
+        }
+
+        debug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+
+            applicationIdSuffix '.debug'
+            manifestPlaceholders = [icon: "@mipmap/ava"]
+            buildConfigField('String', 'type', '"Debug"')
+        }
+
+        custom {
+            initWith debug // initWith copy configurations from other build types
+            manifestPlaceholders = [icon: "@mipmap/ic_launcher"]
+            applicationIdSuffix '.debugcustom'
+            buildConfigField('String', 'type', '"Custom"')
+        }
+    }
+
+    flavorDimensions.add("api")
+    flavorDimensions.add("abm")
+
+    productFlavors {
+        demo {
+            applicationId 'com.kuky.abm'
+            dimension 'abm'
+            applicationIdSuffix '.demo'
+            matchingFallbacks = ['free', 'pro']
+        }
+
+        v2 {
+            dimension 'abm'
+            applicationIdSuffix '.v2'
+            matchingFallbacks = ['pro', 'free']
+        }
+
+        minV21 {
+            dimension 'api'
+            applicationIdSuffix '.min21'
+            versionNameSuffix '-min21v'
+            minSdk 21
+            matchingFallbacks = ['free1', 'pro1']
+        }
+
+        minV30 {
+            applicationId 'com.kuky.api'
+            dimension 'api'
+            applicationIdSuffix '.min30'
+            minSdk 30
+            matchingFallbacks = ['pro1', 'free1']
+        }
+    }
+
+    variantFilter {
+        def names = it.flavors*.name
+
+        if (((names.contains("minV30")) && names.contains("v2")) ||
+                (names.contains("minV21") && names.contains("demo"))) {
+            ignore = true
+        }
+    }
+
+    sourceSets {
+        demo {
+            java.srcDirs = [
+                    'src/main/java',
+                    'src/main/filters'
+            ]
+        }
+    }
+
+    lintOptions {}
+
+    lint {
+        abortOnError false
+    }
+
+//    splits {
+//        abi {
+//            enable true
+//            exclude("x86", "x86_64")
+//        }
+//
+//        density {
+//            enable true
+//            compatibleScreens "small", "large", "normal", "xlarge"
+//        }
+//    }
+
+    // nouse
+    dexOptions {
+
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version "3.18.1"
+        }
+    }
+
+    aaptOptions {}
+
+    androidResources {
+        additionalParameters "--rename-manifest-package", "com.test.gradle"
+        it.failOnMissingConfigEntry
+
+    }
+
+    adbOptions {}
+
+    installation {
+        it.installOptions
+    }
+
+    dexOptions {
+
+    }
+
+    def date = new Date().format("yyyyMMddHHmm")
+
+    applicationVariants.all { /*ApplicationVariantImpl*/ variant ->
+        println "${variant.applicationId}, ${variant.name}，${variant.description}, ${variant.versionName}"
+
+        variant.outputs.all { /*ApkVariantOutputImpl*/ output ->
+            output.versionNameOverride = "v${date}"
+            output.versionCodeOverride = Long.parseLong(date) / 10000
+            output.outputFileName = "${output.versionNameOverride}-${variant.buildType.name}-${date}.apk"
+            println output.outputFileName
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+//    implementation "com.android.tools.build:gradle:7.1.2"
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation project(path: ':modulelib')
+}

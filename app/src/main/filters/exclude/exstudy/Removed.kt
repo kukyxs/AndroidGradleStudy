@@ -1,0 +1,4 @@
+package exstudy
+
+class Removed {
+}

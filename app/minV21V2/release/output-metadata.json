@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.kuky.androidgradlestudy.min21.v2",
+  "variantName": "minV21V2Release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 20220331,
+      "versionName": "v202203310950",
+      "outputFile": "v202203310950-release-202203310950.apk"
+    }
+  ],
+  "elementType": "File"
+}
