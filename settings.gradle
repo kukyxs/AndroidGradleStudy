@@ -8,9 +8,39 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
     repositories {
         google()
         mavenCentral()
+    }
+
+//    versionCatalogs {
+//        libs {
+//            version("groovy", "3.0.5")
+//
+//            library('groovy-core', 'org.codehaus.groovy', 'groovy').versionRef('groovy')
+//            library('groovy-json', 'org.codehaus.groovy', 'groovy-json').versionRef('groovy')
+//            library('groovy-nio', 'org.codehaus.groovy', 'groovy-nio').versionRef('groovy')
+//
+//            library('commons-lang3', 'org.apache.commons', 'commons-lang3').version {
+//                strictly '[3.8, 4.0['
+//                prefer '3.9'
+//            }
+//
+//            bundle("groovy", ["groovy-core", "groovy-json", "groovy-nio"])
+//
+//            plugin("kotlin", "org.jetbrains.kotlin.android").version('1.6.20')
+//        }
+//    }
+
+    versionCatalogs {
+        libs {
+            from(files("${rootDir.getAbsolutePath()}/libs.versions.toml"))
+        }
+
+        testLibs {
+            library("junit", "junit:junit:4.13.2")
+        }
     }
 }
 
