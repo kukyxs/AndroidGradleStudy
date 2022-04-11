@@ -12,6 +12,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url("/Users/kuky/Desktop/AndroidGradleStudy/repository")
+        }
     }
 
     versionCatalogs {

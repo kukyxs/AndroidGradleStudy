@@ -26,5 +26,12 @@
             app:layout_constraintStart_toStartOf="@id/package_name"
             app:layout_constraintTop_toBottomOf="@id/package_name" />
 
+        <TextView
+            android:id="@+id/module_verify"
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/package_name"
+            app:layout_constraintTop_toBottomOf="@id/version"
+            android:layout_height="wrap_content"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

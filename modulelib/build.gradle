@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin)
+    id("maven-publish")
 }
 
 android {
@@ -20,31 +21,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-        custom {
-            initWith debug
-        }
+//        custom {
+//            initWith debug
+//        }
     }
 
-    flavorDimensions.add('api')
-    flavorDimensions.add('abm')
-
-    productFlavors {
-        free1 {
-            dimension 'api'
-        }
-
-        pro1 {
-            dimension 'api'
-        }
-
-        free {
-            dimension 'abm'
-        }
-
-        pro {
-            dimension 'abm'
-        }
-    }
+//    flavorDimensions.add('api')
+//    flavorDimensions.add('abm')
+//    productFlavors {
+//        free1 {
+//            dimension 'api'
+//        }
+//
+//        pro1 {
+//            dimension 'api'
+//        }
+//
+//        free {
+//            dimension 'abm'
+//        }
+//
+//        pro {
+//            dimension 'abm'
+//        }
+//    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -60,4 +60,29 @@ dependencies {
     testImplementation(testLibs.junit)
     androidTestImplementation(testLibs.bundles.test.base)
     implementation(libs.bundles.android.base)
+}
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.getSrcDirs()
+    archiveClassifier = "sources"
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                url("/Users/kuky/Desktop/AndroidGradleStudy/repository")
+            }
+        }
+
+        publications {
+            maven(MavenPublication) {
+                from components.release
+                artifact generateSourcesJar
+                groupId = "com.kuky.library"
+                artifactId = "mylibrary"
+                version = "0.0.1"
+            }
+        }
+    }
 }

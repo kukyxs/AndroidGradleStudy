@@ -194,5 +194,6 @@ dependencies {
     androidTestImplementation(testLibs.bundles.test.base)
 
     implementation(libs.bundles.android.base)
-    implementation project(path: ':modulelib')
+//    implementation project(path: ':modulelib')
+    implementation(libs.test.lib)
 }
