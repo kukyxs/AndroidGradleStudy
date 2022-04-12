@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    compileSdk 31
-    buildToolsVersion "32.0.0"
+    compileSdk libs.versions.compileSdk.get().toInteger()
+    buildToolsVersion libs.versions.buildToolsVersion.get()
 
     defaultConfig {
         applicationId "com.kuky.androidgradlestudy"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "ver-0.1"
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
+        versionCode libs.versions.versionCode.get().toInteger()
+        versionName libs.versions.versionName.get()
 
         multiDexEnabled true
         multiDexKeepProguard file('multidex-keep-rules.pro')
@@ -194,6 +194,5 @@ dependencies {
     androidTestImplementation(testLibs.bundles.test.base)
 
     implementation(libs.bundles.android.base)
-//    implementation project(path: ':modulelib')
     implementation(libs.test.lib)
 }

@@ -5,11 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk libs.versions.compileSdk.get().toInteger()
+    buildToolsVersion libs.versions.buildToolsVersion.get()
 
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -70,9 +71,7 @@ task generateSourcesJar(type: Jar) {
 afterEvaluate {
     publishing {
         repositories {
-            maven {
-                url("/Users/kuky/Desktop/AndroidGradleStudy/repository")
-            }
+            maven { url("${rootProject.projectDir.getAbsolutePath()}/repository") }
         }
 
         publications {
