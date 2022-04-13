@@ -75,9 +75,8 @@ afterEvaluate {
         }
 
         publications {
-            maven(MavenPublication) {
+            releaseLib(MavenPublication) {
                 from components.release
-                artifact generateSourcesJar
                 groupId = "com.kuky.library"
                 artifactId = "mylibrary"
                 version = "0.0.1"
