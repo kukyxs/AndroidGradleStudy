@@ -12,20 +12,19 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url("${rootProject.projectDir.getAbsolutePath()}/repository") }
+        maven(url = uri("${rootProject.projectDir.absolutePath}/repository"))
     }
 
     versionCatalogs {
-        libs {
-            from(files("${rootDir.getAbsolutePath()}/libVersions.toml"))
+        create("libs") {
+            from(files("${rootDir.absolutePath}/libVersions.toml"))
         }
 
-        testLibs {
-            from(files("${rootDir.getAbsolutePath()}/testLibVersions.toml"))
+        create("testLibs") {
+            from(files("${rootDir.absolutePath}/testLibVersions.toml"))
         }
     }
 }
 
 rootProject.name = "AndroidGradleStudy"
-include ':app'
-include ':modulelib'
+include(":app", "modulelib")
